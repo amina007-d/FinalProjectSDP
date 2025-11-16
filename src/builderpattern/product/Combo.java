@@ -5,21 +5,21 @@ import model.Meal;
 public class Combo implements Meal {
 
     private Meal burger;
-    private Meal fries;
+    private Meal sides;
     private Meal drink;
 
     private String name;
     private float cost;
 
-    public Combo(Meal burger, Meal fries, Meal drink) {
+    public Combo(Meal burger, Meal sides, Meal drink) {
         this.burger = burger;
-        this.fries = fries;
+        this.sides = sides;
         this.drink = drink;
 
-        this.name = burger.getName() + " + Fries + Cola";
+        this.name = burger.getName() + " + Sides + Drink";
 
         this.cost = burger.getCost()
-                + (fries != null ? fries.getCost() : 0)
+                + (sides != null ? sides.getCost() : 0)
                 + (drink != null ? drink.getCost() : 0);
     }
 
@@ -36,10 +36,10 @@ public class Combo implements Meal {
     public void setCost(float cost) { this.cost = cost; }
 
     public Meal getBurger() { return burger; }
-    public Meal getFries() { return fries; }
+    public Meal getSides() { return sides; }
     public Meal getDrink() { return drink; }
     public void setBurger(Meal burger) { this.burger = burger; }
-    public void setFries(Meal fries) { this.fries = fries; }
+    public void setSides(Meal fries) { this.sides = fries; }
     public void setDrink(Meal drink) { this.drink = drink; }
 }
 

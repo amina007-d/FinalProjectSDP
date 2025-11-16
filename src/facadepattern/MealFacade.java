@@ -1,9 +1,9 @@
 package facadepattern;
 import builderpattern.product.Combo;
 import builderpattern.builder.ComboBuilder;
-import factorypattern.BurgerFactory;
-import factorypattern.ToppingFactory;
-import factorypattern.SidesFactory;
+import factorypattern.concretecreators.BurgerFactory;
+import factorypattern.concretecreators.ToppingFactory;
+import factorypattern.concretecreators.SidesFactory;
 import model.Meal;
 
 import java.util.List;

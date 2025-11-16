@@ -1,4 +1,5 @@
-package factorypattern;
+package factorypattern.concretecreators;
+
 import builderpattern.sides.*;
 import model.Meal;
 
@@ -10,7 +11,8 @@ public class SidesFactory {
             case "pepsi": return new Pepsi();
             case "fanta": return new Fanta();
             case "sprite": return new Sprite();
-            default: throw new IllegalArgumentException("Unknown drink: " + drink);
+            default:
+                throw new IllegalArgumentException("Unknown drink: " + drink);
         }
     }
 
@@ -19,8 +21,8 @@ public class SidesFactory {
             case "fries": return new Fries();
             case "wedges": return new Wedges();
             case "onionrings": return new OnionRings();
-            default: throw new IllegalArgumentException("Unknown side: " + side);
+            default:
+                throw new IllegalArgumentException("Unknown side: " + side);
         }
     }
 }
-

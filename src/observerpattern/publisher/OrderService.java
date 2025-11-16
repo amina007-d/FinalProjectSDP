@@ -48,7 +48,6 @@ public class OrderService {
     }
 
     private void notifyOrderCreated(Order order) {
-        // Create a copy to avoid ConcurrentModificationException
         List<OrderListener> listenersCopy = new ArrayList<>(listeners);
         for (OrderListener listener : listenersCopy) {
             listener.onOrderCreated(order);
@@ -56,7 +55,6 @@ public class OrderService {
     }
 
     private void notifyOrderStatusChanged(Order order) {
-        // Create a copy to avoid ConcurrentModificationException
         List<OrderListener> listenersCopy = new ArrayList<>(listeners);
         for (OrderListener listener : listenersCopy) {
             listener.onOrderStatusChanged(order);

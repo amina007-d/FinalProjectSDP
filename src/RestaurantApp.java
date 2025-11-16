@@ -7,11 +7,17 @@ import observerpattern.concretesubscribers.KitchenListener;
 import strategypattern.concretepayment.CardPayment;
 import strategypattern.concretepayment.CashPayment;
 import strategypattern.concretepayment.QRPayment;
+import strategypattern.concretedeliveries.CourierDelivery;
+import strategypattern.concretedeliveries.DroneDelivery;
+import strategypattern.concretedeliveries.PickupDelivery;
+import strategypattern.delivery.DeliveryStrategy;
 import strategypattern.payment.PaymentStrategy;
 
 import java.util.*;
 
 public class RestaurantApp {
+    private static Order order;
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -31,8 +37,9 @@ public class RestaurantApp {
             System.out.println("2. Create Combo Order");
             System.out.println("3. Pay for Order");
             System.out.println("4. Show All Orders");
-            System.out.println("5. Exit");
-            System.out.print("Choose option: ");
+            System.out.println("5. Delivery");
+            System.out.print("6: Exit");
+            System.out.print("\nChoose option: ");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -104,6 +111,23 @@ public class RestaurantApp {
             }
 
             else if (choice == 5) {
+                System.out.print("Enter Order ID: ");
+                String id = scanner.nextLine();
+
+                Order order = orders.get(id);
+                if (order == null) {
+                    System.out.println("Order not found!");
+                    continue;
+                }
+
+                System.out.print("Enter address: ");
+                String address = scanner.nextLine();
+
+                DeliveryStrategy delivery = chooseDelivery(scanner);
+                orderFacade.deliverOrder(order, delivery, address);
+            }
+
+            else if (choice == 6) {
                 System.out.println("Goodbye!");
                 break;
             }
@@ -142,6 +166,10 @@ public class RestaurantApp {
         System.out.print("Add Sauce? (yes/no): ");
         if (scanner.nextLine().equalsIgnoreCase("yes"))
             toppings.add("sauce");
+
+        System.out.print("Add Extra Jalapeno? (yes/no): ");
+        if (scanner.nextLine().equalsIgnoreCase("yes"))
+            toppings.add("jalapeno");
 
         return toppings;
     }
@@ -198,6 +226,24 @@ public class RestaurantApp {
             case 2 -> new CardPayment();
             case 3 -> new QRPayment();
             default -> new CashPayment();
+        };
+    }
+
+    private static DeliveryStrategy chooseDelivery(Scanner scanner) {
+        System.out.println("\nChoose delivery type:");
+        System.out.println("1. Courier");
+        System.out.println("2. Pickup");
+        System.out.println("3. Drone");
+        System.out.print("Your choice: ");
+
+        int d = scanner.nextInt();
+        scanner.nextLine();
+
+        return switch (d) {
+            case 1 -> new CourierDelivery();
+            case 2 -> new PickupDelivery();
+            case 3 -> new DroneDelivery();
+            default -> new CourierDelivery();
         };
     }
 }
