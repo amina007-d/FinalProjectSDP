@@ -1,32 +1,63 @@
 package facadepattern;
-import builderpattern.product.Combo;
+
 import builderpattern.builder.ComboBuilder;
-import factorypattern.concretecreators.BurgerFactory;
-import factorypattern.concretecreators.ToppingFactory;
-import factorypattern.concretecreators.SidesFactory;
+import builderpattern.product.Combo;
+import builderpattern.sides.*;
+import factorypattern.concretecreators.*;
+import factorypattern.concretetoppings.*;
+import factorypattern.creators.BurgerCreator;
 import model.Meal;
 
 import java.util.List;
 
 public class MealFacade {
 
-    private BurgerFactory burgerFactory = new BurgerFactory();
-    private ToppingFactory toppingFactory = new ToppingFactory();
-    private SidesFactory sidesFactory = new SidesFactory();
-
     public Meal createBurger(String type, List<String> toppings) {
-        Meal burger = burgerFactory.createBurger(type);
-        for (String topping : toppings)
-            burger = toppingFactory.addTopping(burger, topping);
+
+        BurgerCreator creator = switch (type.toLowerCase()) {
+            case "beef" -> new BeefBurgerCreator();
+            case "chicken" -> new ChickenBurgerCreator();
+            case "doublebeef" -> new DoubleBeefBurgerCreator();
+            case "cheeseburger" -> new CheeseBurgerCreator();
+            default -> throw new IllegalArgumentException("Unknown burger type");
+        };
+
+        Meal burger = creator.createBurger();
+
+        for (String t : toppings) {
+            burger = applyTopping(burger, t);
+        }
+
         return burger;
     }
 
+    private Meal applyTopping(Meal burger, String topping) {
+
+        return switch (topping.toLowerCase()) {
+            case "cheese" -> new ExtraCheeseCreator().apply(burger);
+            case "sauce" -> new ExtraSauceCreator().apply(burger);
+            case "jalapeno" -> new ExtraJalapenoCreator().apply(burger);
+            default -> burger;
+        };
+    }
+
     public Meal createDrink(String drink) {
-        return sidesFactory.createDrink(drink);
+        return switch (drink.toLowerCase()) {
+            case "cola" -> new Cola();
+            case "pepsi" -> new Pepsi();
+            case "fanta" -> new Fanta();
+            case "sprite" -> new Sprite();
+            default -> throw new IllegalArgumentException("Unknown drink");
+        };
     }
 
     public Meal createSide(String side) {
-        return sidesFactory.createSide(side);
+        return switch (side.toLowerCase()) {
+            case "fries" -> new Fries();
+            case "wedges" -> new Wedges();
+            case "onionrings" -> new OnionRings();
+            default -> throw new IllegalArgumentException("Unknown side");
+        };
     }
 
     public Combo createCombo(Meal burger, Meal drink, Meal side) {
@@ -35,29 +66,5 @@ public class MealFacade {
                 .setDrink(drink)
                 .setSide(side)
                 .build();
-    }
-
-    public BurgerFactory getBurgerFactory() {
-        return burgerFactory;
-    }
-
-    public void setBurgerFactory(BurgerFactory burgerFactory) {
-        this.burgerFactory = burgerFactory;
-    }
-
-    public ToppingFactory getToppingFactory() {
-        return toppingFactory;
-    }
-
-    public void setToppingFactory(ToppingFactory toppingFactory) {
-        this.toppingFactory = toppingFactory;
-    }
-
-    public SidesFactory getSidesFactory() {
-        return sidesFactory;
-    }
-
-    public void setSidesFactory(SidesFactory sidesFactory) {
-        this.sidesFactory = sidesFactory;
     }
 }
