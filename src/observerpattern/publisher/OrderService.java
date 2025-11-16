@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OrderService {
 
-    private final List<OrderListener> listeners = new ArrayList<>();
+    private List<OrderListener> listeners = new ArrayList<>();
 
     public void addListener(OrderListener listener) {
         if (listener == null) {
@@ -59,5 +59,11 @@ public class OrderService {
         for (OrderListener listener : listenersCopy) {
             listener.onOrderStatusChanged(order);
         }
+    }
+    public List<OrderListener> getListeners() {
+        return listeners;
+    }
+    public void setListeners(List<OrderListener> listeners) {
+        this.listeners = listeners;
     }
 }
